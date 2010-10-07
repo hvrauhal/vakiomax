@@ -12,7 +12,7 @@
                 var aRow = rows[i];
                 var cleanedUpRow = aRow.replace(/[^1xX2]/g,"").toUpperCase()
                 for (var j=0; j < cleanedUpRow.length; j++) {
-                    var rowNum = (i + 1);
+                    var rowNum = (i + 1).toString(16);
                     var gameId = (j + 1).toString(16);
                     var gameResult = cleanedUpRow[j];
                     address += "&I" + rowNum + gameId + "=" + gameResult;
