@@ -4,10 +4,9 @@
 	<title>VakioMax</title>
 	<script type="text/javascript" src="https://ajax.googleapis.com/ajax/libs/jquery/1.4.2/jquery.min.js"></script>          
 	<script type="text/javascript">
-	function makeVeikkausUrl(event, t, pastedRows) {
+	function makeVeikkausUrl(event, t, rows) {
 	    event.preventDefault();
 	    var address="https://www.veikkaus.fi/mobile?area=wagering&game=sport&op=checkGame&t=" + t + "&type=normal";
-	    rows = pastedRows.split(/[\n\r]+/);
 	    for (var i = 0; i < rows.length; i++) {
                 var aRow = rows[i];
                 var cleanedUpRow = aRow.replace(/[^1xX2]/g,"").toUpperCase()
@@ -18,7 +17,7 @@
                     address += "&I" + rowNum + gameId + "=" + gameResult;
                 }
             }
-            return(address);
+            return address;
         };
         </script>
     </head>
@@ -26,26 +25,31 @@
 	<form action="#">
 	    <fieldset>
 		<legend>Vakiorivit</legend>
-		<p>
-		    <label>Pelityyppi<select id="gameType">
+		<div>
+		    <label for="gameType">Pelityyppi</label>
+		    <select id="gameType">
 			    <option value="1" selected="true">Lauantaivakio</option>
 			    <option value="2">2</option>
 			    <option value="3">3</option>
 			    <option value="4">4</option>
-			</select>
-		    </label>
-		</p>
-		<p>
+		    </select>
+	    </div>
+	    <div>
+			    <label for="pastedRows">Rivit riveittäin</label>
 		    <textarea id="pastedRows" cols="40" rows="12"></textarea> 
-		    <input type="submit" id="submitPastedRows" value="Siirry Veikkauksen kuponkisivulle" />
-		</p>
+	    </div>
+		    <input type="submit" id="submitPastedRows" value="Avaa 11 rivin kupongit uusiin tabeihin" />
 	    </fieldset>
 	</form>
 	<script type="text/javascript" >
 	$("#submitPastedRows").click(function(event) { 
-	    var veikkausUrl = makeVeikkausUrl(event, $("#gameType").val(), $("#pastedRows").val());
-	    window.location = veikkausUrl;
-	});
+	    var rows = $("#pastedRows").val().split(/[\n\r]+/);
+		while(rows.length > 0) {
+			var first = rows.slice(0,11);
+			var veikkausUrl = makeVeikkausUrl(event, $("#gameType").val(), first);
+			window.open(veikkausUrl);
+			rows = rows.slice(11);
+		}});
 	</script>
     </body>
 </html>
