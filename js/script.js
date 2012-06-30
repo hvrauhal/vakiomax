@@ -1,4 +1,21 @@
 $("#create-coupons").click(function (e) {
+    e.preventDefault();
+
+    function makeVeikkausUrl(cleaned_up_rows) {
+        var lauantaivakio_gametype = 1;
+        var address="https://www.veikkaus.fi/mobile?area=wagering&game=sport&op=checkGame&t=" + lauantaivakio_gametype + "&type=normal";
+        for (var i = 0; i < cleaned_up_rows.length; i++) {
+            var aRow = cleaned_up_rows[i];
+            for (var j=0; j < aRow.length; j++) {
+                var rowNum = (i + 1).toString(16);
+                var gameId = (j + 1).toString(16);
+                var gameResult = aRow[j];
+                address += "&I" + rowNum + gameId + "=" + gameResult;
+            }
+        }
+        return address;
+    }
+
 	function find_rows() {
 	    var rows, coupon_ordered;
 	    e.preventDefault();
@@ -9,10 +26,13 @@ $("#create-coupons").click(function (e) {
 	    coupon_ordered = _.zip.apply(null, rows);
 	    return [rows, coupon_ordered];
 	}
-	rows_co = find_rows();
-	rows = rows_co[0];
-	coupon = rows_co[1];
+	var rows_co = find_rows();
+	var rows = rows_co[0];
+	var coupon = rows_co[1];
 	console.log(rows);
 	console.log(coupon);
-	$("#coupons").append($('<div><p><table id="coupon-1" class="un-submitted"><tr><th>ottelu</th><th>1.</th></tr><tr><td>1.</td><td>x</td></tr></table></p><p><a class="btn btn-primary" href="#">Siirry maksamaan &raquo;</a></p></div>').html());
+    var coupon_contents = '<p><table id="coupon-1" class="un-submitted"><tr><th>ottelu</th><th>1.</th></tr><tr><td>1.</td><td>x</td></tr></table></p>';
+
+    var linktext = '<p><a class="btn btn-primary" target="_blank" href="' + makeVeikkausUrl(rows) + '">Siirry maksamaan &raquo;</a></p>';
+    $("#coupons").append($('<div>' + coupon_contents + linktext + '</div>').html());
     })
