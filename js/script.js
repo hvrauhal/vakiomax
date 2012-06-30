@@ -1,20 +1,21 @@
+function makeVeikkausUrl(cleaned_up_rows) {
+    var lauantaivakio_gametype = 1;
+    var address="https://www.veikkaus.fi/mobile?area=wagering&game=sport&op=checkGame&t=" + lauantaivakio_gametype + "&type=normal";
+    for (var i = 0; i < cleaned_up_rows.length; i++) {
+        var aRow = cleaned_up_rows[i];
+        for (var j=0; j < aRow.length; j++) {
+            var rowNum = (i + 1).toString(16);
+            var gameId = (j + 1).toString(16);
+            var gameResult = aRow[j];
+            address += "&I" + rowNum + gameId + "=" + gameResult;
+        }
+    }
+    return address;
+}
+
 $("#create-coupons").click(function (e) {
     e.preventDefault();
 
-    function makeVeikkausUrl(cleaned_up_rows) {
-        var lauantaivakio_gametype = 1;
-        var address="https://www.veikkaus.fi/mobile?area=wagering&game=sport&op=checkGame&t=" + lauantaivakio_gametype + "&type=normal";
-        for (var i = 0; i < cleaned_up_rows.length; i++) {
-            var aRow = cleaned_up_rows[i];
-            for (var j=0; j < aRow.length; j++) {
-                var rowNum = (i + 1).toString(16);
-                var gameId = (j + 1).toString(16);
-                var gameResult = aRow[j];
-                address += "&I" + rowNum + gameId + "=" + gameResult;
-            }
-        }
-        return address;
-    }
 
 	function find_rows() {
 	    var rows;
@@ -27,11 +28,22 @@ $("#create-coupons").click(function (e) {
 	}
 	var rows = find_rows();
     var coupon =  _.zip.apply(null, rows)
-	console.log(rows);
-	console.log(coupon);
-    var coupon_contents = '<p><table id="coupon-1" class="un-submitted"><tr><th>ottelu</th><th>1.</th></tr><tr><td>1.</td><td>x</td></tr></table></p>';
+
+    var coupon_contents = '<p>' + '<table id="coupon" class="un-submitted">';
+    coupon_contents += '<thead><tr><th></th>' + _.map(_.range(coupon[0].length), function (i) { return '<th>' + i + '.</th>'}).join('') + '</tr></thead>'
+    coupon_contents += _.map(coupon,function (row) {
+        return '<tr>' + _.map(row,function (elem) {
+            return '<td>' + elem + '</td>';
+        }).join('') + '</tr>';
+    }).join('')
+
+//        '<tr><td>1.</td><td>x</td></tr>' +
+    coupon_contents +=
+        '</table>' +
+        '</p>';
     var linktext = '<p><a class="btn btn-primary siirry" target="_blank" href="' + makeVeikkausUrl(rows) + '">Siirry maksamaan &raquo;</a></p>';
-    $("#coupons").append($('<div>' + coupon_contents + linktext + '</div>').html());
+    var new_coupon = '<div>' + coupon_contents + linktext + '</div>';
+    $("#coupons").append($(new_coupon).html());
     })
 
 $('body').on('click', '.siirry', function (e) {
