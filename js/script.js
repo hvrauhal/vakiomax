@@ -17,22 +17,25 @@ $("#create-coupons").click(function (e) {
     }
 
 	function find_rows() {
-	    var rows, coupon_ordered;
+	    var rows;
 	    e.preventDefault();
 	    rows = $("#raw-rows").val().split(/[\r\n]/);
 	    rows = _.filter(rows, function(row) { return row.length > 1; });
 	    rows = _.map(rows, function(row) { return row.replace(/[^1xX2]/g,'').toUpperCase();});
 	    rows = _.map(rows, function(row) { return row.split('');});
-	    coupon_ordered = _.zip.apply(null, rows);
-	    return [rows, coupon_ordered];
+	    return rows;
 	}
-	var rows_co = find_rows();
-	var rows = rows_co[0];
-	var coupon = rows_co[1];
+	var rows = find_rows();
+    var coupon =  _.zip.apply(null, rows)
 	console.log(rows);
 	console.log(coupon);
     var coupon_contents = '<p><table id="coupon-1" class="un-submitted"><tr><th>ottelu</th><th>1.</th></tr><tr><td>1.</td><td>x</td></tr></table></p>';
-
-    var linktext = '<p><a class="btn btn-primary" target="_blank" href="' + makeVeikkausUrl(rows) + '">Siirry maksamaan &raquo;</a></p>';
+    var linktext = '<p><a class="btn btn-primary siirry" target="_blank" href="' + makeVeikkausUrl(rows) + '">Siirry maksamaan &raquo;</a></p>';
     $("#coupons").append($('<div>' + coupon_contents + linktext + '</div>').html());
     })
+
+$('body').on('click', '.siirry', function (e) {
+    $(this).removeClass('btn-primary');
+    $(this).text('Siirry maksamaan uudestaan');
+});
+
