@@ -31,8 +31,11 @@ $("#create-coupons").click(function (e) {
 
     var coupon_contents = '<p>' + '<table id="coupon" class="un-submitted">';
     coupon_contents += '<thead><tr><th></th>' + _.map(_.range(coupon[0].length), function (i) { return '<th>' + i + '.</th>'}).join('') + '</tr></thead>'
-    coupon_contents += _.map(coupon,function (row) {
-        return '<tr>' + _.map(row,function (elem) {
+    coupon_contents += _.map(_.zip(_.range(coupon.length), coupon),function (index_row) {
+        var index = index_row[0];
+        var row = index_row[1];
+        return '<tr>' +  '<th>' +  ++index  +
+            '</th>' + _.map(row,function (elem) {
             return '<td>' + elem + '</td>';
         }).join('') + '</tr>';
     }).join('')
