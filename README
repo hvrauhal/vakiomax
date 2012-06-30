@@ -1,5 +1,6 @@
 This is a heroku app.
 
 Run locally with:
+bundle install
 rackup
 
