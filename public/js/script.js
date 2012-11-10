@@ -20,13 +20,10 @@ $("#create-coupons").click(function (e) {
 
 
 	function find_rows() {
-	    var rows;
-	    e.preventDefault();
-	    rows = $("#raw-rows").val().split(/[\r\n]/);
-	    rows = _.filter(rows, function(row) { return row.length > 1; });
-	    rows = _.map(rows, function(row) { return row.replace(/[^1xX2]/g,'').toUpperCase();});
-	    rows = _.map(rows, function(row) { return row.split('');});
-	    return rows;
+	    return _($("#raw-rows").val().split(/[\r\n]/)).chain()
+                .filter(function(row) { return row.length > 1 })
+                .map(function(row) { return row.replace(/[^1xX2]/g,'').toUpperCase()})
+                .value()
 	}
 	var rows = find_rows();
 
@@ -35,7 +32,7 @@ $("#create-coupons").click(function (e) {
         var coupon = _.zip.apply(null, rows)
         var coupon_contents = '<p>' + '<table id="coupon" class="un-submitted">';
         coupon_contents += '<thead><tr><th></th>' + _.map(_.range(coupon[0].length),function (i) {
-            return '<th>' + alphabet.charAt(i++) + '.</th>'
+            return '<th>' + alphabet[i++] + '.</th>'
         }).join('') + '</tr></thead>'
         coupon_contents += _.map(_.zip(_.range(coupon.length), coupon),function (index_row) {
             var index = index_row[0];
