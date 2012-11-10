@@ -1,4 +1,6 @@
-function makeVeikkausUrl(cleaned_up_rows) {
+vakiomax = window.vakiomax || {}
+
+vakiomax.makeVeikkausUrl = function(cleaned_up_rows) {
     var lauantaivakio_gametype = 1;
     var address="https://www.veikkaus.fi/mobile?area=wagering&game=sport&op=checkGame&t=" + lauantaivakio_gametype + "&type=normal";
     for (var i = 0; i < cleaned_up_rows.length; i++) {
@@ -46,7 +48,7 @@ $("#create-coupons").click(function (e) {
         coupon_contents +=
             '</table>' +
                 '</p>';
-        var linktext = '<p><a class="btn btn-primary siirry" target="_blank" href="' + makeVeikkausUrl(rows) + '">Siirry maksamaan &raquo;</a></p>';
+        var linktext = '<p><a class="btn btn-primary siirry" target="_blank" href="' + vakiomax.makeVeikkausUrl(rows) + '">Siirry maksamaan &raquo;</a></p>';
         var new_coupon = '<div>' + coupon_contents + linktext + '</div>';
         $("#coupons").append($(new_coupon).html());
         $("#raw-rows").val("");
