@@ -60,5 +60,6 @@ $("#create-coupons").click(function (e) {
 $('body').on('click', '.siirry', function (e) {
     $(this).removeClass('btn-primary');
     $(this).text('Siirry maksamaan uudestaan');
+    $('.siirry.btn-primary').get(0).scrollIntoView(false);
 });
 
