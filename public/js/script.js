@@ -53,10 +53,10 @@ $("#create-coupons").click(function (e) {
         $("#coupons").append($(new_coupon).html());
         $("#raw-rows").val("");
     }
-    while (rows.length > 0) {
-        add_a_coupon(_.first(rows, 11));
-        rows = _.rest(rows, 11);
-    }
+    _(rows).chain()
+      .groupBy(function(game, index) {return Math.floor(index / 11)})
+      .each(add_a_coupon)
+      .value()
 })
 
 $('body').on('click', '.siirry', function (e) {
