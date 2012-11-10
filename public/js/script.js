@@ -31,20 +31,20 @@ $("#create-coupons").click(function (e) {
 	var rows = find_rows();
 
     function add_a_coupon(rows) {
+        var alphabet = 'ABCDEFGHIJKLMNOPQRSTUVWXYZ';
         var coupon = _.zip.apply(null, rows)
         var coupon_contents = '<p>' + '<table id="coupon" class="un-submitted">';
         coupon_contents += '<thead><tr><th></th>' + _.map(_.range(coupon[0].length),function (i) {
-            return '<th>' + ++i + '.</th>'
+            return '<th>' + alphabet.charAt(i++) + '.</th>'
         }).join('') + '</tr></thead>'
         coupon_contents += _.map(_.zip(_.range(coupon.length), coupon),function (index_row) {
             var index = index_row[0];
             var row = index_row[1];
             return '<tr>' + '<th>' + ++index +
-                '. kohde</th>' + _.map(row,function (elem) {
+                '</th>' + _.map(row,function (elem) {
                 return '<td>' + elem + '</td>';
             }).join('') + '</tr>';
         }).join('')
-//        '<tr><td>1.</td><td>x</td></tr>' +
         coupon_contents +=
             '</table>' +
                 '</p>';
